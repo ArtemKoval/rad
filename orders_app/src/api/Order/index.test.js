@@ -5,7 +5,8 @@ jest.mock('./OrderProcessor', () => {
       makePaymentRequest: () => {
         return Promise.resolve({
           order_id: '5cd2c4fa48a289e465fff0a2',
-          _id: '5cd2c4fa48a289e465fff0a2'
+          _id: '5cd2c4fa48a289e465fff0a2',
+          status: 'confirmed'
         })
       }
     }
@@ -40,7 +41,7 @@ test('POST /Orders 201 Order must be created with "created" status', async () =>
     })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
-  expect(body.status).toEqual('created')
+  expect(body.status).toEqual('confirmed')
   expect(body.user_id).toEqual('5cd2c4fa48a289e465fff0a2')
 })
 

@@ -26,7 +26,7 @@ test('POST /Payments 201', async () => {
       })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
-  expect(body.status).toEqual('test')
+  expect(['confirmed', 'declined']).toContain(body.status)
   expect(body.order_id).toEqual('5cd2c4fa48a234e465fff022')
 })
 

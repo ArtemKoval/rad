@@ -10,7 +10,9 @@ export const create = ({bodymen: {body}}, res, next) => {
   orderService.create(body)
     .then((order) => order.view(true))
     .then(success(res, 201))
-    .catch(next)
+    .catch((err) => {
+      throw new Error(err)
+    })
 }
 
 export const index = ({querymen: {query, select, cursor}}, res, next) =>

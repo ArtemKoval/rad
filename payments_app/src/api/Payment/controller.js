@@ -1,9 +1,12 @@
 import {success, notFound} from '../../services/response/'
 import {Payment} from '.'
+import PaymentService from './PaymentService'
+
+let paymentService = new PaymentService()
 
 export const create = ({bodymen: {body}}, res, next) => {
-  Payment.create(body)
-    .then((payment) => payment.view(true))
+  paymentService.processOrder(body)
+    .then((order) => order.view(true))
     .then(success(res, 201))
     .catch(next)
 }

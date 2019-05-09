@@ -9,24 +9,38 @@ class OrderService {
   }
 
   create (body) {
-    let options = {
-      method: 'POST',
-      uri: paymentsAppURI,
-      body: {
-        body
-      },
-      json: true
-    }
     body.status = Statuses.CREATED
     return Order.create(body)
       .then((order) => {
+        let options = {
+          method: 'POST',
+          uri: paymentsAppURI,
+          body: {
+            body
+          },
+          json: true
+        }
         return this.orderProcessor.makePaymentRequest(options, order)
       })
       .then((paymentResponse) => {
+        let orderStatus = Statuses.CREATED
+        switch (paymentResponse.status) {
+          case 'declined':
+            orderStatus = Statuses.CANCELED
+            break
+          case 'confirmed':
+            orderStatus = Statuses.CONFIRMED
+            break
+          default:
+            throw new Error(`Unknown payment status ${JSON.stringify(paymentResponse)}`)
+        }
         return new Promise((resolve, reject) => {
           Order.findById(paymentResponse.order_id)
             .then((order) => order ? Object.assign(order,
-              {payment_id: paymentResponse.id}).save() : null)
+              {
+                payment_id: paymentResponse.id,
+                status: orderStatus
+              }).save() : null)
             .then(resolve)
             .catch((err) => {
               reject(err)
