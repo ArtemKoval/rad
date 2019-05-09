@@ -1,14 +1,11 @@
 import mongoose, { Schema } from 'mongoose'
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-const orderSchema = new Schema({
+const paymentSchema = new Schema({
   status: {
     type: String
   },
-  user_id: {
-    type: ObjectId
-  },
-  payment_id: {
+  order_id: {
     type: ObjectId
   }
 }, {
@@ -19,14 +16,13 @@ const orderSchema = new Schema({
   }
 })
 
-orderSchema.methods = {
+paymentSchema.methods = {
   view (full) {
     const view = {
       // simple view
       id: this.id,
       status: this.status,
-      user_id: this.user_id,
-      payment_id: this.payment_id,
+      order_id: this.order_id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -38,7 +34,7 @@ orderSchema.methods = {
   }
 }
 
-const model = mongoose.model('Order', orderSchema)
+const model = mongoose.model('Payment', paymentSchema)
 
 export const schema = model.schema
 export default model

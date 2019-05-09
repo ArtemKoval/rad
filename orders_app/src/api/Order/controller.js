@@ -1,10 +1,13 @@
 import {success, notFound} from '../../services/response/'
 import {Order} from '.'
 import {Statuses} from './OrderStatuses'
+import OrderService from './OrderService'
+
+let orderService = new OrderService()
 
 export const create = ({bodymen: {body}}, res, next) => {
   body.status = Statuses.CREATED
-  Order.create(body)
+  orderService.create(body)
     .then((order) => order.view(true))
     .then(success(res, 201))
     .catch(next)

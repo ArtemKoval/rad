@@ -1,6 +1,9 @@
 import { Router } from 'express'
+import payment from './Payment'
 
 const router = new Router()
+
+router.use('/Payments', payment)
 
 /**
  * @apiDefine master Master access only

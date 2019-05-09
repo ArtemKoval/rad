@@ -1,3 +1,19 @@
+/* eslint-disable import/first,camelcase */
+jest.mock('./OrderProcessor', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      makePaymentRequest: () => {
+        return Promise.resolve({
+          order_id: '5cd2c4fa48a289e465fff0a2',
+          _id: '5cd2c4fa48a289e465fff0a2'
+        })
+      }
+    }
+  })
+})
+
+jest.mock('./OrderProcessor')
+
 import request from 'supertest'
 import {apiRoot} from '../../config'
 import express from '../../services/express'
@@ -8,7 +24,11 @@ const app = () => express(apiRoot, routes)
 let order
 
 beforeEach(async () => {
-  order = await Order.create({})
+  order = await Order.create({
+    _id: '5cd2c4fa48a289e465fff0a2',
+    user_id: '5cd2c4fa48a289e465fff0a2',
+    status: 'created'
+  })
 })
 
 test('POST /Orders 201 Order must be created with "created" status', async () => {
@@ -16,14 +36,12 @@ test('POST /Orders 201 Order must be created with "created" status', async () =>
     .post(`${apiRoot}`)
     .send({
       status: 'wrong_status',
-      user_id: '5cd2c4fa48a289e465fff0a2',
-      payment_id: '5cd2c4fa48a289e465fff0a2'
+      user_id: '5cd2c4fa48a289e465fff0a2'
     })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.status).toEqual('created')
   expect(body.user_id).toEqual('5cd2c4fa48a289e465fff0a2')
-  expect(body.payment_id).toEqual('5cd2c4fa48a289e465fff0a2')
 })
 
 test('GET /Orders 200', async () => {
