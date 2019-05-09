@@ -34,7 +34,7 @@ class OrderService {
         })
       })
       .catch((err) => {
-        throw new Error(err)g
+        throw new Error(err)
       })
   }
 }
