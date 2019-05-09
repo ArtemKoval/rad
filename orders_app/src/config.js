@@ -37,6 +37,7 @@ const config = {
   },
   test: { },
   development: {
+    deliveredTimeoutInSec: 5,
     paymentsAppURI: 'http://payments_app:9000/payments',
     mongo: {
       uri: 'mongodb://mongo/orders-app-dev',
