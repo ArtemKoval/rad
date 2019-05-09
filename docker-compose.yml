@@ -5,7 +5,7 @@ services:
     build:
       context: ./orders_app
       dockerfile: Dockerfile
-    image: orders_app
+    image: artkoval/orders_app
     container_name: orders_app
     restart: unless-stopped
     env_file: ./orders_app/.env
@@ -24,7 +24,7 @@ services:
     build:
       context: ./payments_app
       dockerfile: Dockerfile
-    image: payments_app
+    image: artkoval/payments_app
     container_name: payments_app
     restart: unless-stopped
     env_file: ./payments_app/.env
